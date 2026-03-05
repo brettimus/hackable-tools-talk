@@ -1,5 +1,5 @@
-# Fiberplane local issue tracking
-.fp/
+# Fiberplane local issue tracking — ignore everything except extensions
+.fp/*
 !.fp/extensions/
 
 .env

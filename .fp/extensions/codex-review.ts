@@ -10,7 +10,7 @@ export default function codexReview(fp: FpExtensionContext) {
     fp.log.info(`[codex-review] ${issue.id} marked done — triggering review`);
 
     // Gather the diff for this issue
-    const diff = await runCommand("fp", ["issue", "diff", issue.id]);
+    const diff = await runCommand("fp", ["issue", "diff", issue.id], fp.projectDir);
     if (!diff.trim()) {
       fp.log.info(`[codex-review] no diff found for ${issue.id}, skipping`);
       return;
@@ -36,33 +36,23 @@ export default function codexReview(fp: FpExtensionContext) {
     // Build the prompt for codex
     const prompt = buildReviewPrompt(issue, diff, commentLog, reviewParent.id);
 
-    // Run codex CLI to do the review
-    try {
-      const result = await runCommand("codex", [
-        "--approval-mode",
-        "full-auto",
-        "--full-stdout",
-        prompt,
-      ]);
+    // Spawn codex detached so it survives fp exiting.
+    // Codex will self-report results via `fp comment` in the prompt.
+    const codexProc = spawn("codex", [
+      "--approval-mode", "full-auto",
+      prompt,
+    ], {
+      cwd: fp.projectDir,
+      detached: true,
+      stdio: "ignore",
+      env: { ...process.env },
+    });
 
-      // Log the review as a comment on the original issue
-      const summary =
-        result.trim().slice(0, 2000) || "Codex review completed (no output).";
-      await fp.comments.create(
-        issue.id,
-        `**Codex Review**\n\n${summary}\n\nFollow-up issues filed under ${reviewParent.id}.`
-      );
+    codexProc.unref();
 
-      fp.log.info(`[codex-review] review complete for ${issue.id}`);
-    } catch (err) {
-      fp.log.error(
-        `[codex-review] codex failed: ${err instanceof Error ? err.message : String(err)}`
-      );
-      await fp.comments.create(
-        issue.id,
-        `**Codex Review** failed to run. Error: ${err instanceof Error ? err.message : String(err)}`
-      );
-    }
+    fp.log.info(
+      `[codex-review] spawned codex (pid ${codexProc.pid}) detached for ${issue.id}`
+    );
   });
 }
 
@@ -98,12 +88,15 @@ ${diff.slice(0, 8000)}
    fp issue create --title "<concise title>" --parent ${followUpParentId} --status todo
    IMPORTANT: The --parent value must be exactly "${followUpParentId}" (not "root" or any other value).
 3. If the work looks clean, just say so — don't create issues for the sake of it.
-4. Output a brief summary of your findings.`;
+4. When you are done, post a summary of your findings by running:
+   fp comment ${issue.id} "Review complete. <your summary here>"
+   This is REQUIRED — it is how you report back.`;
 }
 
-function runCommand(cmd: string, args: string[]): Promise<string> {
+function runCommand(cmd: string, args: string[], cwd: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const proc = spawn(cmd, args, {
+      cwd,
       stdio: ["ignore", "pipe", "pipe"],
       env: { ...process.env },
     });
