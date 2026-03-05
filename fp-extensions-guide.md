@@ -417,6 +417,23 @@ Since you can't capture stdout from a detached process, have the child self-repo
 
 Pass `fp.projectDir` as `cwd` for all spawned processes so they resolve project-local config and .fp data correctly.
 
+### Codex CLI invocation: use `codex exec`, not bare `codex`
+
+- `--approval-mode` is **not a valid flag** in codex 0.98.0. Use `--full-auto` as a boolean flag.
+- Bare `codex [PROMPT]` is interactive and needs a tty. With `stdio: "ignore"` (required for detached processes), it will error out.
+- Use `codex exec --full-auto` and pipe the prompt via stdin:
+
+```typescript
+const proc = spawn("codex", ["exec", "--full-auto"], {
+  cwd: fp.projectDir,
+  detached: true,
+  stdio: ["pipe", "ignore", "ignore"],
+});
+proc.stdin.write(prompt);
+proc.stdin.end();
+proc.unref();
+```
+
 ### Be explicit in LLM prompts
 
 When instructing Codex to run fp commands, be extremely specific about argument values. Codex will improvise if given ambiguity — e.g. using `root` as a `--parent` value instead of the actual issue ID.

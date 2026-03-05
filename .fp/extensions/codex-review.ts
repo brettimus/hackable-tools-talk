@@ -60,17 +60,18 @@ export default function codexReview(fp: FpExtensionContext) {
     ], fp.projectDir);
 
     // Spawn codex detached so it survives fp exiting.
-    // Codex will self-report results via `fp comment` in the prompt.
-    const codexProc = spawn("codex", [
-      "--approval-mode", "full-auto",
-      prompt,
-    ], {
+    // Use `codex exec --full-auto` with prompt piped via stdin.
+    // Bare `codex [PROMPT]` is interactive and needs a tty;
+    // `--approval-mode` is not a valid flag in codex 0.98.0.
+    const codexProc = spawn("codex", ["exec", "--full-auto"], {
       cwd: fp.projectDir,
       detached: true,
-      stdio: "ignore",
+      stdio: ["pipe", "ignore", "ignore"],
       env: { ...process.env },
     });
 
+    codexProc.stdin!.write(prompt);
+    codexProc.stdin!.end();
     codexProc.unref();
 
     fp.log.info(
