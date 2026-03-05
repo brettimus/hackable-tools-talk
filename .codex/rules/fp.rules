@@ -1,0 +1,12 @@
+# Allow fp CLI commands in the Codex sandbox
+prefix_rule(pattern=["fp"], decision="allow", justification="fp CLI for issue tracking and project management")
+
+# Allow common git read commands
+prefix_rule(pattern=["git", "status"], decision="allow")
+prefix_rule(pattern=["git", "diff"], decision="allow")
+prefix_rule(pattern=["git", "log"], decision="allow")
+
+# Allow bun commands for slides
+prefix_rule(pattern=["bun", "run"], decision="allow")
+prefix_rule(pattern=["bun", "install"], decision="allow")
+prefix_rule(pattern=["bun", "test"], decision="allow")

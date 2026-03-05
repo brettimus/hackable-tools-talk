@@ -3,6 +3,9 @@
 
 .env
 
+# Codex user-specific config
+.codex/config.local.toml
+
 # Dependencies
 node_modules/
 
