@@ -16,31 +16,47 @@ export default function codexReview(fp: FpExtensionContext) {
       return;
     }
 
-    // Gather comments for context
-    const comments = await fp.comments.list(issue.id);
-    const commentLog = comments
-      .map((c) => `[${c.author}]: ${c.content}`)
-      .join("\n");
+    // Gather comments for context via CLI (workaround: fp.comments.list
+    // works but fp.issues.create has a yjs_updates null ID bug, so we
+    // shell out for all writes to be safe)
+    let commentLog = "";
+    try {
+      const commentsRaw = await runCommand("fp", ["comment", "list", issue.id, "--format", "json"], fp.projectDir);
+      const comments = JSON.parse(commentsRaw);
+      commentLog = comments
+        .map((c: { author: string; content: string }) => `[${c.author}]: ${c.content}`)
+        .join("\n");
+    } catch {
+      // comment list may not support --format json, fall back to plain
+      commentLog = await runCommand("fp", ["comment", "list", issue.id], fp.projectDir).catch(() => "");
+    }
 
-    // Create a parent issue for follow-ups
-    const reviewParent = await fp.issues.create({
-      title: `Review follow-ups: ${issue.title}`,
-      status: "todo",
-      description: `Auto-generated review of ${issue.id} by codex-review extension.`,
-    });
+    // Create a parent issue for follow-ups via CLI
+    // (workaround for fp.issues.create() null ID bug in extension context)
+    const createOutput = await runCommand("fp", [
+      "issue", "create",
+      "--title", `Review follow-ups: ${issue.title}`,
+      "--status", "todo",
+    ], fp.projectDir);
 
-    fp.log.info(
-      `[codex-review] created follow-up parent ${reviewParent.id}`
-    );
+    // Parse the issue ID from output like "Created issue CODEX-abc123: ..."
+    const idMatch = createOutput.match(/(\w+-\w+):/);
+    if (!idMatch) {
+      fp.log.error(`[codex-review] failed to parse parent issue ID from: ${createOutput}`);
+      return;
+    }
+    const reviewParentId = idMatch[1];
+
+    fp.log.info(`[codex-review] created follow-up parent ${reviewParentId}`);
 
     // Build the prompt for codex
-    const prompt = buildReviewPrompt(issue, diff, commentLog, reviewParent.id);
+    const prompt = buildReviewPrompt(issue, diff, commentLog, reviewParentId);
 
     // Notify that a review is starting
-    await fp.comments.create(
-      issue.id,
-      `Automatic code review kicked off by codex-review extension. Follow-ups will be filed under ${reviewParent.id}.`
-    );
+    await runCommand("fp", [
+      "comment", issue.id,
+      `Automatic code review kicked off by codex-review extension. Follow-ups will be filed under ${reviewParentId}.`,
+    ], fp.projectDir);
 
     // Spawn codex detached so it survives fp exiting.
     // Codex will self-report results via `fp comment` in the prompt.
