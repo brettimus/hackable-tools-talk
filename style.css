@@ -512,3 +512,14 @@
   font-weight: 300;
   padding-top: 3rem;
 }
+
+/* Mobile: tighter padding so content doesn't get clipped */
+@media (max-width: 768px) {
+  .slidev-layout {
+    padding: 1.5rem 2rem;
+  }
+
+  .slidev-layout h1 {
+    font-size: 2rem;
+  }
+}

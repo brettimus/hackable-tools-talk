@@ -9,6 +9,7 @@ drawings:
   persist: false
 transition: slide-left
 mdc: true
+canvasWidth: 840
 ---
 
 <style>
@@ -19,10 +20,30 @@ mdc: true
 
 # Hackable Tools Will Win
 
+<img src="/qr-talk.svg" class="w-52 h-52 mt-6 opacity-80 ml-auto" />
+
 </div>
 
-<div class="abs-br m-6 text-sm font-mono opacity-40">
+<div class="abs-br m-6 text-sm font-mono opacity-60">
 Brett Beutell · @lastgoodhandle
+</div>
+
+---
+
+# tl;dr
+
+<div class="mt-8 space-y-2">
+
+<v-clicks>
+
+- LLMs are better at reviewing code than writing code
+- Unlearn your hesitation to write custom code for your tools
+- Choose tools that prioritize extensibility
+- Try Codex Desktop App automations (and TypeScript SDK)
+- Demos to show all of this
+
+</v-clicks>
+
 </div>
 
 ---
@@ -57,30 +78,20 @@ Brett Beutell · @lastgoodhandle
 </div>
 
 ---
-
-# tl;dr
-
-<div class="mt-8 space-y-2">
-
-<v-clicks>
-
-- LLMs are better at reviewing code than writing code
-- Unlearn your hesitation to write custom code for your tools
-- Choose tools that prioritize extensibility, and don't force "one way of doing things"
-- Try Codex TypeScript SDK and Desktop App automations
-- Demos to show all of this
-
-</v-clicks>
-
-</div>
-
----
 layout: center
 ---
 
 <div class="text-4xl font-semibold tracking-tight leading-snug max-w-3xl text-center">
 We are entering an era of personalized software
 </div>
+
+<v-click>
+
+<div class="mt-6 text-xl opacity-60 text-center">
+Everyone is a power user now
+</div>
+
+</v-click>
 
 ---
 
@@ -154,10 +165,10 @@ layout: section
 
 <div class="h-full flex flex-col justify-center">
 
-# Demo 1: Lifecycle extension
+# Demo 1: Always review your code
 
 <div class="mt-4 text-lg opacity-60">
-"Remember to do a code review" — a lifecycle hook that prompts review
+After completing a task, invoke Codex via command line to review and file findings under a new tracking ticket
 </div>
 
 </div>
