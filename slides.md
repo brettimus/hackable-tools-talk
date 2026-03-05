@@ -1,6 +1,6 @@
 ---
 theme: default
-title: Hackable Tools Win
+title: Hackable Tools Will Win
 info: |
   A short talk about extensible tools and personalized software
   in the age of AI-generated code.
@@ -15,9 +15,7 @@ mdc: true
 @import './style.css';
 </style>
 
-# Hackable Tools Win
-
-The era of personalized software
+# Hackable Tools Will Win
 
 <div class="abs-br m-6 text-sm">
 Brett Beutell · @lastgoodhandle
@@ -27,14 +25,34 @@ Brett Beutell · @lastgoodhandle
 
 # About Me
 
+<div class="grid grid-cols-[1fr_auto] gap-12 items-center mt-4">
+
+<div>
+
 **Brett Beutell** · Developer @ Fiberplane · Amsterdam
 
 - Building `fp` — a CLI task tracker for AI coding agents
 - I use Codex + Claude Code together daily
 - They surface different bugs, they verify each other's work
 
+</div>
+
+<div class="flex flex-col items-center gap-3">
+<img src="/fp-logo.png" class="w-24 h-24 rounded-2xl shadow-lg" />
+<a href="https://fp.dev" target="_blank" class="text-sm opacity-70 hover:opacity-100 no-underline">fp.dev</a>
+</div>
+
+</div>
+
 ---
-layout: section
+
+# Takeaways
+
+- Unlearn your hesitation to write custom code for your tools
+- Choose tools that prioritize extensibility, and don't force "one way of doing things"
+- Use Codex to craft your workflow
+- **Bonus:** try Codex desktop app automations
+
 ---
 
 # We are entering an era of personalized software
@@ -49,33 +67,17 @@ layout: section
 
 ---
 
-# Hackable tools and harnesses will win
+# Extensions are feature multipliers
 
 Products that support extensions as first class citizens:
 
 - **Obsidian** — community plugins are the product
-- **Pi** — hackable AI assistant
-- **fp** — about to release an extension system
-
----
-layout: section
----
-
-# How this relates to Codex
+- **Pi** — hackable agent harness competing successfully with major labs
+- **fp.dev** — extensions coming soon!
 
 ---
 
-# Codex extensibility today
-
-- Extensions protocol WIP — absorbed into MCP and TypeScript SDK
-- Hooks still maturing (RFC)
-- Current path: expose Codex as MCP + general scripting
-
----
-layout: section
----
-
-# How this relates to me
+# How this relates
 
 ---
 
@@ -102,6 +104,12 @@ layout: section
 # Demo 2: Live extension
 
 Real-time notifications or `say` — write an extension live
+
+---
+
+# Demo 3: Codex automations
+
+Recursively improve your setup with Codex desktop app automations
 
 ---
 layout: center
