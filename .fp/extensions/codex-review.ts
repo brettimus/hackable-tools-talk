@@ -39,8 +39,9 @@ export default function codexReview(fp: FpExtensionContext) {
       "--status", "todo",
     ], fp.projectDir);
 
-    // Parse the issue ID from output like "Created issue CODEX-abc123: ..."
-    const idMatch = createOutput.match(/(\w+-\w+):/);
+    // Parse the issue ID from output like "✓ Created issue CODEX-abc123: ..."
+    // NOTE: fp logs (timestamp=...) go to stdout too, so we must match specifically.
+    const idMatch = createOutput.match(/Created issue (CODEX-\w+)/);
     if (!idMatch) {
       fp.log.error(`[codex-review] failed to parse parent issue ID from: ${createOutput}`);
       return;
