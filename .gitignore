@@ -2,6 +2,7 @@
 .fp/
 
 .env
+.envrc
 
 # Codex user-specific config
 .codex/config.local.toml
