@@ -1,9 +1,9 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "cc-task-managers-talk",
+	"name": "hackable-tools-talk",
 	"compatibility_date": "2025-01-30",
 	"routes": [
-		{ "pattern": "cct.boots.lol", "custom_domain": true }
+		{ "pattern": "hackable-tools.fp.dev", "custom_domain": true }
 	],
 	"assets": {
 		"directory": "./dist",

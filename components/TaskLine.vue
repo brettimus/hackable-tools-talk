@@ -5,13 +5,13 @@ defineProps<{
 }>()
 
 // Split the ID into parts for styling
-// Format: PREFIX-uniqueXXXXXX (e.g., CCTA-vojsagkz)
+// Format: PREFIX-uniqueXXXXXX (e.g., CODX-vojsagkz)
 function splitId(id: string) {
   const dashIndex = id.indexOf('-')
   if (dashIndex === -1) {
     return { prefix: '', unique: id.slice(0, 3), rest: id.slice(3) }
   }
-  const prefix = id.slice(0, dashIndex + 1) // e.g., "CCTA-"
+  const prefix = id.slice(0, dashIndex + 1) // e.g., "CODX-"
   const hash = id.slice(dashIndex + 1) // e.g., "vojsagkz"
   return {
     prefix,
