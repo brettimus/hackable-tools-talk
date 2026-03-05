@@ -64,10 +64,10 @@ Brett Beutell · @lastgoodhandle
 
 <v-clicks>
 
+- LLMs are better at reviewing code than writing code
 - Unlearn your hesitation to write custom code for your tools
 - Choose tools that prioritize extensibility, and don't force "one way of doing things"
-- Use Codex to craft your workflow
-- **Bonus:** try Codex desktop app automations
+- **Bonus:** try Codex TypeScript SDK and Desktop App automations
 
 </v-clicks>
 
