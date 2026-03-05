@@ -201,6 +201,12 @@ Recursively improve your setup with Codex desktop app automations
 layout: center
 ---
 
+<img src="/codex-automations-screenshot.png" class="rounded-xl w-full max-w-2xl object-contain shadow-lg" />
+
+---
+layout: center
+---
+
 # Thank You
 
 **Brett Beutell** · Developer @ Fiberplane · Amsterdam
