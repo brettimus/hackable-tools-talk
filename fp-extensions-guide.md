@@ -57,13 +57,13 @@ Every extension receives a single `FpExtensionContext` object:
 interface FpExtensionContext {
   readonly runtime: "cli" | "desktop";
   readonly projectDir: string;
-  readonly on: (event, handler) => void;          // Hook registration
-  readonly issues: ExtensionIssueAccessPromise;    // Issue CRUD
-  readonly comments: ExtensionCommentAccessPromise; // Comment CRUD
-  readonly secrets: ExtensionSecretsAccessPromise;  // OS keychain
-  readonly ui: ExtensionUiAccessPromise;            // Desktop actions & toasts
-  readonly config: ExtensionConfigAccess;           // Read config.toml
-  readonly log: ExtensionLogger;                    // debug/info/warn/error
+  readonly on: (event, handler) => void;                    // Hook registration
+  readonly issues: ExtensionIssueContextAccessPromise;      // Issue CRUD + registerProperty
+  readonly comments: ExtensionCommentAccessPromise;          // Comment CRUD
+  readonly secrets: ExtensionSecretsAccessPromise;           // OS keychain
+  readonly ui: ExtensionUiAccessPromise;                     // Actions, toasts, property builders
+  readonly config: ExtensionConfigAccess;                    // Read config.toml
+  readonly log: ExtensionLogger;                             // debug/info/warn/error
 }
 ```
 
@@ -77,6 +77,7 @@ const issue = await fp.issues.create({
   parent: parentIssueId,    // optional
   description: "Details...", // optional
   priority: "high",         // optional
+  fields: { environment: "staging" }, // optional — custom property values
 });
 
 // Read
@@ -84,8 +85,12 @@ const found = await fp.issues.get("PROJ-42");       // null if not found
 const open = await fp.issues.list({ status: "in-progress" });
 const children = await fp.issues.list({ parent: issue.id });
 
-// Update
-await fp.issues.update(issue.id, { status: "done", title: "New title" });
+// Update (including custom fields)
+await fp.issues.update(issue.id, {
+  status: "done",
+  title: "New title",
+  fields: { environment: "production" },
+});
 
 // Delete
 await fp.issues.delete(issue.id);
@@ -102,9 +107,11 @@ interface ExtensionIssue {
   priority: "urgent" | "high" | "medium" | "low" | null;
   parent: string | null;
   dependencies: string[];
+  revisions: { commits: string[] } | null;
   author?: string;
   createdAt: string;
   updatedAt: string;
+  fields?: Record<string, unknown>;  // custom property values
 }
 ```
 
@@ -168,6 +175,98 @@ await fp.ui.notify("Operation complete", {
   kind: "success",                      // "info" | "success" | "warning" | "error"
 });
 ```
+
+### `fp.issues.registerProperty` — Custom Issue Properties
+
+Extensions can define custom properties on issues that appear in the Desktop UI alongside built-in fields like status and priority.
+
+```typescript
+const { properties } = fp.ui;
+
+// Select (single-value dropdown)
+await fp.issues.registerProperty("environment", {
+  label: "Environment",
+  icon: "server",                    // Lucide icon name
+  display: properties.select(
+    properties.option("production", { label: "Production", icon: "shield", color: "destructive" }),
+    properties.option("staging", { label: "Staging", icon: "flask-conical", color: "warning" }),
+    properties.option("development", { label: "Development", icon: "code", color: "blue" }),
+  ),
+});
+
+// Multiselect (multi-value chips)
+await fp.issues.registerProperty("labels", {
+  label: "Labels",
+  icon: "tags",
+  display: properties.multiselect(
+    properties.option("frontend", { label: "Frontend", icon: "layout", color: "purple" }),
+    properties.option("backend", { label: "Backend", icon: "database", color: "turquoise" }),
+  ),
+});
+
+// Text (inline editable string)
+await fp.issues.registerProperty("estimate", {
+  label: "Estimate",
+  icon: "clock",
+  display: properties.text(),
+});
+```
+
+**`PropertyOptions`:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `label` | `string` | No | Display label for the property row |
+| `icon` | `string` | No | Lucide icon name |
+| `schema` | Standard Schema | No | Validator (Zod, Valibot, ArkType, etc.) |
+| `display` | `PropertyDisplay` | Yes | How the value renders |
+
+**`PropertyDisplay` types:** `select`, `multiselect`, `text`
+
+**`PropertyOption` fields:** `value` (required), `label?`, `icon?`, `color?`
+
+**`PropertyColor`** — 13 constrained colors: `neutral`, `purple`, `pink`, `turquoise`, `blue`, `yellow`, `orange`, `mint`, `red`, `lime`, `success`, `warning`, `destructive`
+
+**Option rendering rules:**
+
+| icon | color | Renders as |
+|------|-------|-----------|
+| yes | yes | colored chip with icon |
+| yes | no | icon + plain label |
+| no | yes | colored dot + label |
+| no | no | plain text |
+
+#### `fp.ui.properties` builder namespace
+
+Helper functions to construct display definitions without hand-writing discriminated unions:
+
+```typescript
+fp.ui.properties.option(value, { label?, icon?, color? })  // → PropertyOption
+fp.ui.properties.select(...options)                         // → PropertyDisplay
+fp.ui.properties.multiselect(...options)                    // → PropertyDisplay
+fp.ui.properties.text()                                     // → PropertyDisplay
+```
+
+These are injected on the context — you only need a `type`-only import for `FpExtensionContext`.
+
+#### Schema validation
+
+Pass any [Standard Schema](https://github.com/standard-schema/standard-schema)-compatible validator. Values are validated on `create` and `update`. Unregistered field keys are rejected.
+
+```typescript
+import { z } from "zod";
+
+await fp.issues.registerProperty("priority-score", {
+  label: "Priority Score",
+  icon: "gauge",
+  schema: z.number().min(1).max(10),
+  display: fp.ui.properties.text(),
+});
+```
+
+#### Storage
+
+Field values are stored inside the existing Y.Doc — no separate file or migration needed. Extension fields participate in CRDT sync automatically and merge via Yjs LWW semantics. `registerProperty()` rejects keys that collide with built-in attributes.
 
 ### `fp.log` — Structured Logging
 
@@ -335,10 +434,11 @@ The `examples/` directory in the repo contains a teaching ladder:
 | 1 | `hello-hooks` | Beginner | Logging, post-hooks, welcome comments, config |
 | 2 | `status-transition-guard` | Beginner | Pre-hook validation, blocking transitions |
 | 3 | `post-create-automation` | Beginner | Conditional automation, child issue creation |
-| 4 | `quality-gate` | Intermediate | Config-driven build checks |
-| 5 | `backlog-researcher` | Intermediate | Spawning external CLI (`claude`), posting research |
-| 6 | `jj-workspace` | Advanced | VCS integration (jj bookmarks/workspaces) |
-| 7 | `cursor-agent` | Advanced | Secrets, UI actions, custom fields, polling, notifications |
+| 4 | `custom-properties` | Beginner | All property display types (select, multiselect, text) |
+| 5 | `quality-gate` | Intermediate | Config-driven build checks |
+| 6 | `backlog-researcher` | Intermediate | Spawning external CLI (`claude`), posting research |
+| 7 | `jj-workspace` | Advanced | VCS integration (jj bookmarks/workspaces) |
+| 8 | `cursor-agent` | Advanced | Secrets, UI actions, custom fields, polling, notifications |
 
 Copy files from `examples/<name>/.fp/extensions/` into your `.fp/extensions/`. Check each example's `.fp/config.toml` for required config values.
 
@@ -367,7 +467,10 @@ To add a dependency, run `bun add <pkg>` from `.fp/extensions/` (or create a `pa
 - **Kill-switch** — `FP_DISABLE_EXTENSIONS=1` env var force-disables all extensions
 - **Project opt-out** — `[extensions] enabled = false` in `.fp/config.toml`
 - **No install command yet** — Manage extensions by placing files in the right directory
+- **Live reload (Desktop)** — The Desktop app watches extension directories and auto-reloads when files change. Pending pre-hooks are drained before restart.
 - **Type hints** — `import type { FpExtensionContext } from "@fiberplane/fp-core"` for autocomplete
+- **Custom fields validation** — Field values are validated against registered schemas on `create` and `update`. Unregistered field keys are rejected with `ExtensionFieldValidationError`.
+- **Built-in key protection** — `registerProperty()` rejects keys that collide with built-in attributes (`status`, `priority`, `parent`, `dependencies`, `revisions`, `updatedAt`, etc.)
 
 ## Practical Learnings (from building codex-review)
 
@@ -375,7 +478,7 @@ These were discovered building an extension that spawns Codex CLI to review comp
 
 ### Shell out for writes, use extension API for reads
 
-`fp.issues.create()` currently has a bug where the yjs_updates table receives a null ID in extension context. `fp.comments.list()` and `fp.issues.get()` work fine. Safe pattern:
+`fp.issues.create()` had a bug where the yjs_updates table received a null ID in extension context. This may be fixed now (`issueCreateAndReturn` is used in the current loader). Test with the extension API first; fall back to shelling out if needed. Safe fallback pattern:
 
 ```typescript
 // Reads — extension API works
@@ -443,6 +546,7 @@ When instructing Codex to run fp commands, be extremely specific about argument 
 | File | What it contains |
 |------|-----------------|
 | `packages/fp-core/src/lib/extension-context.ts` | API contracts (`FpExtensionContext`, all interfaces) |
+| `packages/fp-core/src/lib/extension-fields.ts` | Custom property registry, display types, schema validation, builder helpers |
 | `packages/fp-core/src/models/extension.ts` | Data models (`ExtensionIssue`, hook contexts, etc.) |
 | `packages/fp-core/src/services/extension-service.ts` | Hook emission service |
 | `packages/fp-core/src/lib/extension-loader.ts` | Discovery, resolution, loading, bridge layer |
