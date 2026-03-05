@@ -36,6 +36,12 @@ export default function codexReview(fp: FpExtensionContext) {
     // Build the prompt for codex
     const prompt = buildReviewPrompt(issue, diff, commentLog, reviewParent.id);
 
+    // Notify that a review is starting
+    await fp.comments.create(
+      issue.id,
+      `Automatic code review kicked off by codex-review extension. Follow-ups will be filed under ${reviewParent.id}.`
+    );
+
     // Spawn codex detached so it survives fp exiting.
     // Codex will self-report results via `fp comment` in the prompt.
     const codexProc = spawn("codex", [
