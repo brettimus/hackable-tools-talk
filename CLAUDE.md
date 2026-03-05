@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+This repo is a Slidev presentation about hackable tools and the era of personalized software. It is symlinked to AGENTS.md for Codex CLI compatibility.
+
 ## fp workflow
 
 @FP_CLAUDE.md

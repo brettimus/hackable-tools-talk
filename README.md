@@ -1,6 +1,6 @@
-# Task Managers for Claude Code
+# Hackable Tools Win: The Era of Personalized Software
 
-A Slidev presentation about agent-native task management tools and how they improve AI coding workflows.
+A short, demo-heavy Slidev talk about why extensible, hackable tools will win in the age of AI-generated code.
 
 ## Development
 
