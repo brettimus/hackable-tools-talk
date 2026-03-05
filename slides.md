@@ -37,7 +37,6 @@ Brett Beutell · @lastgoodhandle
 <v-clicks>
 
 - LLMs are better at reviewing code than writing code
-- Unlearn your hesitation to write custom code for your tools
 - Choose tools that prioritize extensibility
 - Try Codex Desktop App automations (and TypeScript SDK)
 - Demos to show all of this
@@ -115,6 +114,8 @@ Everyone is a power user now
 
 <div class="mt-8">
 
+A robust extension ecosystem lets small teams support a vast number of use cases.
+
 Products that support extensions as first class citizens:
 
 <div class="mt-6 space-y-2">
@@ -141,19 +142,31 @@ How this relates
 
 ---
 
-# Why fp is building extensions
+# I can map my workflow to my tool
 
-<div class="mt-12 space-y-2">
+<div class="mt-2 text-lg opacity-60">My tool does not force me into a workflow</div>
+
+<div class="mt-8 space-y-2">
 
 <v-clicks>
 
-- Feedback on "batteries included" features is very workflow-specific
-- People want different things — can't ship them all as core
-- Solution: let people write their own extensions
+- I use `fp` to track tasks that Codex works on
+- I usually have another agent do code review
+- Reviewer tracks all feedback in a separate ticket
+- Later, I can look at all the code reviews we've done in a month
+- Codex can find common error patterns we should fix upstream, in AGENTS.md
 
 </v-clicks>
 
 </div>
+
+<v-click>
+
+<div class="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-lg">
+We thought of making this a feature for fp. Instead: it's an extension I can build in 5–10 minutes myself.
+</div>
+
+</v-click>
 
 ---
 layout: section
