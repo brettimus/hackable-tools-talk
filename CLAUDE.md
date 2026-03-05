@@ -2,7 +2,7 @@
 
 ## fp workflow
 
-@.fp/FP_CLAUDE.md
+@FP_CLAUDE.md
 
 ### notifications
 
