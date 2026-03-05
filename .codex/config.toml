@@ -1,3 +1,4 @@
 include = [
+  ".codex/config.shared.toml",
   ".codex/config.local.toml"
 ]
