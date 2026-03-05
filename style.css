@@ -1,0 +1,514 @@
+/* Terminal Luxe - A refined dark aesthetic with electric blue accents */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Nocturne-inspired OKLCH color palette */
+  --primary: oklch(0.565 0.239 263.9);
+  --primary-dim: oklch(0.45 0.18 263.9);
+  --primary-glow: oklch(0.65 0.28 263.9);
+  --primary-bg: oklch(0.565 0.239 263.9 / 0.12);
+  --primary-border: oklch(0.565 0.239 263.9 / 0.25);
+
+  /* Neutral scale */
+  --neutral-950: oklch(0.1075 0.01 260);
+  --neutral-900: oklch(0.15 0.01 260);
+  --neutral-800: oklch(0.22 0.01 260);
+  --neutral-700: oklch(0.32 0.01 260);
+  --neutral-600: oklch(0.45 0.01 260);
+  --neutral-400: oklch(0.65 0.01 260);
+  --neutral-300: oklch(0.75 0.01 260);
+  --neutral-200: oklch(0.85 0.01 260);
+  --neutral-50: oklch(0.97 0.005 260);
+
+  /* Semantic accents with background variants */
+  --success: oklch(0.65 0.20 155);
+  --success-bg: oklch(0.65 0.20 155 / 0.12);
+  --success-border: oklch(0.65 0.20 155 / 0.25);
+
+  --warning: oklch(0.75 0.16 65);
+  --warning-bg: oklch(0.75 0.16 65 / 0.12);
+  --warning-border: oklch(0.75 0.16 65 / 0.25);
+
+  --danger: oklch(0.60 0.22 25);
+  --danger-bg: oklch(0.60 0.22 25 / 0.12);
+  --danger-border: oklch(0.60 0.22 25 / 0.25);
+
+  --purple: oklch(0.60 0.22 300);
+  --purple-bg: oklch(0.60 0.22 300 / 0.12);
+  --purple-border: oklch(0.60 0.22 300 / 0.25);
+
+  --orange-bg: oklch(0.70 0.18 50 / 0.12);
+  --orange-border: oklch(0.70 0.18 50 / 0.25);
+
+  --yellow-bg: oklch(0.80 0.16 85 / 0.12);
+  --yellow-border: oklch(0.80 0.16 85 / 0.25);
+
+  /* Slidev theme variables */
+  --slidev-slide-container-background: var(--neutral-950);
+  --slidev-code-background: var(--neutral-900);
+  --slidev-code-font-size: 0.85em;
+
+  color-scheme: dark;
+}
+
+/* Base slide styling */
+.slidev-layout {
+  background: var(--neutral-950);
+  color: var(--neutral-50);
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 2.5rem 3.5rem;
+}
+
+/* Typography refinements */
+.slidev-layout h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 2.5rem;
+  letter-spacing: -0.03em;
+  color: var(--neutral-50);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.slidev-layout h2 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+  color: var(--neutral-200);
+  margin-bottom: 0.75rem;
+}
+
+.slidev-layout h3 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.slidev-layout p,
+.slidev-layout li {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--neutral-200);
+}
+
+/* Code blocks - terminal aesthetic */
+.slidev-layout pre,
+.slidev-layout code {
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+.slidev-layout .slidev-code {
+  background: var(--neutral-900);
+  border: 1px solid var(--neutral-800);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.slidev-layout .shiki {
+  background: transparent;
+}
+
+/* Inline code */
+.slidev-layout :not(pre) > code {
+  background: var(--neutral-800);
+  color: var(--primary-glow);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Lists - tighter spacing */
+.slidev-layout ul,
+.slidev-layout ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.slidev-layout li {
+  margin: 0.35rem 0;
+}
+
+.slidev-layout li::marker {
+  color: var(--primary);
+}
+
+/* Card-like containers - using Slidev scoping */
+.slidev-layout .bg-neutral-800 {
+  background: var(--neutral-800);
+  border: 1px solid var(--neutral-700);
+  border-radius: 10px;
+}
+
+/* Colored accent backgrounds */
+.slidev-layout .bg-blue-500\/10,
+.slidev-layout .bg-blue-500\/20 {
+  background: var(--primary-bg);
+  border: 1px solid var(--primary-border);
+  border-radius: 10px;
+}
+
+.slidev-layout .bg-green-500\/10 {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  border-radius: 10px;
+}
+
+.slidev-layout .bg-purple-500\/10 {
+  background: var(--purple-bg);
+  border: 1px solid var(--purple-border);
+  border-radius: 10px;
+}
+
+.slidev-layout .bg-orange-500\/10 {
+  background: var(--orange-bg);
+  border: 1px solid var(--orange-border);
+  border-radius: 10px;
+}
+
+.slidev-layout .bg-yellow-500\/10 {
+  background: var(--yellow-bg);
+  border: 1px solid var(--yellow-border);
+  border-radius: 10px;
+}
+
+.slidev-layout .bg-red-500\/10 {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  border-radius: 10px;
+}
+
+/* Section layout - dramatic centered text */
+.slidev-layout.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--neutral-950) 0%,
+    oklch(0.13 0.02 263.9) 100%
+  );
+}
+
+.slidev-layout.section h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--neutral-50) 0%, var(--primary-glow) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.slidev-layout.section p {
+  font-size: 1.4rem;
+  color: var(--neutral-400);
+}
+
+/* Center layout */
+.slidev-layout.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Mermaid diagrams */
+.slidev-layout .mermaid {
+  background: transparent;
+}
+
+/* Links */
+.slidev-layout a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.slidev-layout a:hover {
+  color: var(--primary-glow);
+}
+
+/* Tool cards in the landscape section */
+.slidev-layout .grid-cols-5 > div,
+.slidev-layout .grid-cols-5 > a {
+  background: var(--neutral-800);
+  border: 1px solid var(--neutral-700);
+  border-radius: 10px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.slidev-layout .grid-cols-5 > a:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--primary-bg);
+}
+
+/* v-clicks animation enhancement */
+.slidev-vclick-target {
+  transition: all 0.25s ease;
+}
+
+.slidev-vclick-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Progress indicators at bottom */
+.slidev-layout .abs-br {
+  color: var(--neutral-400);
+}
+
+/* Blockquote styling */
+.slidev-layout blockquote {
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--neutral-400);
+  font-style: italic;
+}
+
+/* Table styling */
+.slidev-layout table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.slidev-layout th {
+  background: var(--neutral-800);
+  color: var(--neutral-200);
+  font-weight: 500;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--neutral-700);
+}
+
+.slidev-layout td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--neutral-800);
+  color: var(--neutral-300);
+}
+
+.slidev-layout tr:hover td {
+  background: var(--neutral-900);
+}
+
+/* Terminal-style code output blocks */
+.slidev-layout .font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Emphasis text */
+.slidev-layout strong {
+  color: var(--neutral-50);
+  font-weight: 600;
+}
+
+.slidev-layout em {
+  color: var(--neutral-400);
+}
+
+/* Slide number styling */
+.slidev-page-number {
+  color: var(--neutral-600);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-900);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-700);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-600);
+}
+
+/* Link cards - no underline */
+.slidev-layout a.no-underline {
+  text-decoration: none;
+}
+
+/* ================================================
+   Terminal Output Component Styles
+   ================================================ */
+
+/* File tree styling (Markdown Litter slide) */
+.file-tree {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.tree-line {
+  color: var(--neutral-300);
+}
+
+.tree-line .dir {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.tree-line .file {
+  color: var(--neutral-200);
+}
+
+.tree-line .stale {
+  color: var(--neutral-600);
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
+/* Git log styling (PR Review Problem slide) */
+.git-log {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.log-line {
+  color: var(--neutral-300);
+}
+
+.log-count {
+  color: var(--neutral-400);
+  font-weight: 500;
+}
+
+.log-hash {
+  color: var(--warning);
+}
+
+.log-type {
+  font-weight: 500;
+}
+
+.log-type.feat {
+  color: oklch(0.65 0.20 155); /* green */
+}
+
+.log-type.fix {
+  color: oklch(0.60 0.22 25); /* red/danger */
+}
+
+.log-type.refactor {
+  color: var(--primary);
+}
+
+/* Bash command styling (PLAN, EXECUTE slides) */
+.bash-cmd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--neutral-200);
+}
+
+.bash-cmd .prompt {
+  color: oklch(0.65 0.20 155); /* green */
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.bash-cmd .comment {
+  color: var(--neutral-600);
+  font-style: italic;
+}
+
+.cmd-indent {
+  padding-left: 1.25rem;
+  color: var(--neutral-300);
+}
+
+/* fp diff styling (REVIEW slide) */
+.fp-diff {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.fp-diff .prompt {
+  color: oklch(0.65 0.20 155);
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.diff-header {
+  color: var(--neutral-400);
+  margin-top: 0.5rem;
+}
+
+.diff-id {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.diff-count {
+  color: var(--warning);
+  font-weight: 500;
+}
+
+.diff-files {
+  margin-top: 0.75rem;
+}
+
+.diff-line {
+  color: var(--neutral-300);
+}
+
+.diff-file {
+  color: var(--neutral-200);
+}
+
+.diff-add {
+  color: oklch(0.65 0.20 155); /* green */
+}
+
+/* Session grid (The Cycle in Practice slide) */
+.session-grid {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.session-col {
+  flex: 1;
+}
+
+.session-header {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--neutral-400);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.session-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 300;
+  padding-top: 3rem;
+}

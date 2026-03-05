@@ -1,0 +1,19 @@
+# Fiberplane local issue tracking
+.fp/
+
+.env
+
+# Dependencies
+node_modules/
+
+# Slidev build output
+dist/
+
+# Bun
+bun.lockb
+
+# Wrangler generated types
+worker-configuration.d.ts
+
+# Wrangler local state
+.wrangler/
