@@ -29,13 +29,17 @@ Brett Beutell · @lastgoodhandle
 
 # About Me
 
-<div class="grid grid-cols-[1fr_auto] gap-12 items-center mt-8">
+<div class="mt-2 opacity-60 text-xs">
+<TaskLine id="CODX-a3kf9x2z" status="in-progress">prepare this talk</TaskLine>
+</div>
+
+<div class="grid grid-cols-[1fr_auto] gap-12 items-center mt-2">
 
 <div>
 
-**Brett Beutell** · Developer @ Fiberplane · Amsterdam
-
 <v-clicks>
+
+**Brett Beutell** · Developer @ Fiberplane · Amsterdam
 
 - Building `fp` — a CLI task tracker for AI coding agents
 - I use Codex + Claude Code together daily
@@ -52,13 +56,9 @@ Brett Beutell · @lastgoodhandle
 
 </div>
 
-<div class="mt-4 opacity-60 text-xs">
-<TaskLine id="CODX-a3kf9x2z" status="in-progress">prepare this talk</TaskLine>
-</div>
-
 ---
 
-# Takeaways
+# tl;dr
 
 <div class="mt-8 space-y-2">
 
@@ -67,7 +67,8 @@ Brett Beutell · @lastgoodhandle
 - LLMs are better at reviewing code than writing code
 - Unlearn your hesitation to write custom code for your tools
 - Choose tools that prioritize extensibility, and don't force "one way of doing things"
-- **Bonus:** try Codex TypeScript SDK and Desktop App automations
+- Try Codex TypeScript SDK and Desktop App automations
+- Demos to show all of this
 
 </v-clicks>
 
@@ -90,7 +91,7 @@ We are entering an era of personalized software
 <v-clicks>
 
 - AI agents can write plugin and extension code in minutes
-- This doesn't mean writing everything yourself
+- This doesn't mean replacing all SaaS (ignore the clickbait)
 - It means products should support **pluggability** and **extensibility** more than ever
 
 </v-clicks>
